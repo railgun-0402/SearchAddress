@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
 
 void main() {
   runApp(MyApp());
@@ -53,7 +56,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 OutlinedButton(
                   child: Text('検索'),
                   onPressed: () {
-                    print('pressButton');
+                    searchAddress('0010001');
                   },
                 ),
               ],
@@ -77,5 +80,16 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
     );
+  }
+
+  Future<void> searchAddress(String zipCode) async {
+    // URL
+    String url = 'https://zipcloud.ibsnet.co.jp/api/search?zipcode=$zipCode';
+    var result = await get(Uri.parse(url));
+
+    // json形式(key/value)なのでMapを使用
+    Map<String, dynamic> data = jsonDecode(result.body);
+    // 後は呼び出し元に返却でも出力でも任意の操作で！
+    print(data);
   }
 }
